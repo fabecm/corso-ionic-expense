@@ -1,4 +1,5 @@
-export interface Spesa {
+export interface SpesaInterface {
+    id?: number,
     data: string,
     testo: string,
     categoria: string,

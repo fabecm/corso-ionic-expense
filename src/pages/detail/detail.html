@@ -1,8 +1,12 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ spesa.testo }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="saveSpesaToService()">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -32,4 +36,7 @@
     </ion-item>
 
   </ion-list>
+  <button ion-button (click)="removeSpesaFromService()">
+    Cancella
+  </button>
 </ion-content>

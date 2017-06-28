@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { SpeseService } from '../../app/spese.service';
-import { Spesa } from '../../app/spese.model';
+import { SpesaInterface } from '../../app/spese.model';
 
 @IonicPage()
 @Component({
@@ -10,11 +10,39 @@ import { Spesa } from '../../app/spese.model';
   templateUrl: 'detail.html',
 })
 export class DetailPage {
-  spesa: Spesa;
+  spesa: SpesaInterface;
+  exist: boolean;
   categorie: string[];
   constructor(public navCtrl: NavController, public navParams: NavParams, private speseServizio: SpeseService) {
-    this.spesa = navParams.data;
+    let spesaDelServizio = speseServizio.getSpesa(navParams.data);
+    if (spesaDelServizio.id) {
+      this.exist = true;
+      this.spesa = speseServizio.getSpesa(navParams.data);
+    } else {
+      this.exist = false;
+      this.spesa = {
+        data: '',
+        testo: '',
+        categoria: '',
+        spesa: 0
+      }
+    }
+
     this.categorie = speseServizio.categorie;
+  }
+
+  saveSpesaToService () {
+    if (this.exist) {
+      this.speseServizio.saveSpesa(this.spesa.id, this.spesa);
+    } else {
+      this.speseServizio.addSpesa(this.spesa);
+    }
+    this.navCtrl.pop();
+  }
+
+  removeSpesaFromService () {
+    this.speseServizio.removeSpesa(this.spesa.id);
+    this.navCtrl.pop();
   }
 
 }
