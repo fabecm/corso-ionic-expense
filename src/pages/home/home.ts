@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 import { DetailPage } from '../detail/detail';
+import { SpeseService } from '../../app/spese.service';
+import { Spesa } from '../../app/spese.model';
 
 @Component({
   selector: 'page-home',
@@ -9,29 +11,13 @@ import { DetailPage } from '../detail/detail';
 })
 export class HomePage {
 
-  constructor(private navCtrl: NavController) {
-
+  expenses: Spesa[];
+  constructor(private navCtrl: NavController, private speseServizio:SpeseService) {
+    this.expenses = speseServizio.expenses;
   }
 
-  goToDetail (spesa) {
-    this.navCtrl.push(DetailPage);
+  goToDetail (spesa: Spesa) {
+    this.navCtrl.push(DetailPage, spesa);
   }
-
-  expenses = [{
-    data: '2017-05-03',
-    testo: 'Biglietto per Venezia',
-    categoria: 'Viaggi',
-    spesa: 26
-  }, {
-    data: '2017-02-17',
-    testo: 'Concerto',
-    categoria: 'Svago',
-    spesa: 82
-  }, {
-    data: '2017-01-23',
-    testo: 'Ingresso presepe vivente',
-    categoria: 'Viaggi',
-    spesa: 100
-  }]
 
 }
