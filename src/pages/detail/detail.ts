@@ -10,25 +10,25 @@ import { SpesaInterface } from '../../app/spese.model';
   templateUrl: 'detail.html',
 })
 export class DetailPage {
-  spesa: SpesaInterface;
+  spesa: SpesaInterface = {
+    data: '',
+    testo: '',
+    categoria: '',
+    spesa: 0
+  };
   exist: boolean;
   categorie: string[];
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private speseServizio: SpeseService,
               private alertCtrl: AlertController) {
-    let spesaDelServizio = speseServizio.getSpesa(navParams.data);
-    if (spesaDelServizio.id) {
+
+    if (navParams.get('id')) {
       this.exist = true;
-      this.spesa = speseServizio.getSpesa(navParams.data);
+      speseServizio.getSpesa(navParams.get('id'))
+        .then(result => this.spesa = result.json() as SpesaInterface);
     } else {
       this.exist = false;
-      this.spesa = {
-        data: '',
-        testo: '',
-        categoria: '',
-        spesa: 0
-      }
     }
 
     this.categorie = speseServizio.categorie;
@@ -36,11 +36,14 @@ export class DetailPage {
 
   saveSpesaToService () {
     if (this.exist) {
-      this.speseServizio.saveSpesa(this.spesa.id, this.spesa);
+      this.speseServizio.saveSpesa(this.spesa.id, this.spesa).then(() => {
+        this.navCtrl.pop();
+      })
     } else {
-      this.speseServizio.addSpesa(this.spesa);
+      this.speseServizio.addSpesa(this.spesa).then(() => {
+        this.navCtrl.pop();
+      })
     }
-    this.navCtrl.pop();
   }
 
   removeSpesaFromService () {
@@ -54,8 +57,9 @@ export class DetailPage {
         {
           text: 'Conferma',
           handler: () => {
-            this.speseServizio.removeSpesa(this.spesa.id);
-            this.navCtrl.pop();
+            this.speseServizio.removeSpesa(this.spesa.id).then(() => {
+              this.navCtrl.pop();
+            })
           }
         }
       ]
