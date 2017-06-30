@@ -41,6 +41,5 @@ export class SpeseService {
         nuovaSpesa.id = this.nextId;
         this.expenses.push(nuovaSpesa);
         this.nextId ++;
-        console.log(this.expenses);
     }
 }

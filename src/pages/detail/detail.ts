@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { SpeseService } from '../../app/spese.service';
 import { SpesaInterface } from '../../app/spese.model';
@@ -13,7 +13,10 @@ export class DetailPage {
   spesa: SpesaInterface;
   exist: boolean;
   categorie: string[];
-  constructor(public navCtrl: NavController, public navParams: NavParams, private speseServizio: SpeseService) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private speseServizio: SpeseService,
+              private alertCtrl: AlertController) {
     let spesaDelServizio = speseServizio.getSpesa(navParams.data);
     if (spesaDelServizio.id) {
       this.exist = true;
@@ -41,8 +44,23 @@ export class DetailPage {
   }
 
   removeSpesaFromService () {
-    this.speseServizio.removeSpesa(this.spesa.id);
-    this.navCtrl.pop();
+    let alert = this.alertCtrl.create({
+      title: 'Conferma eliminazione',
+      message: `Sei sicuro di voler eliminare la spesa : "${this.spesa.testo}"`,
+      buttons: [
+        {
+          text: 'Cancella'
+        },
+        {
+          text: 'Conferma',
+          handler: () => {
+            this.speseServizio.removeSpesa(this.spesa.id);
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
 }

@@ -3,11 +3,6 @@
     <ion-title>
       Expense Tracker
     </ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="goToDetail()">
-        <ion-icon name="add"></ion-icon>
-      </button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -16,6 +11,12 @@
     <button ion-item *ngFor="let expense of expenses" (click)="goToDetail(expense)">
       <h2>{{ expense.spesa | currency:'EUR':true }}</h2>
       <p>{{expense.data | date}} - {{ expense.testo }}</p>
+      <ion-note item-right>{{ expense.categoria }}</ion-note>
     </button>
   </ion-list>
+  <ion-fab bottom right>
+    <button ion-fab color="primary" (click)="goToDetail()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

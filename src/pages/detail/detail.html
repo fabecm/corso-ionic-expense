@@ -2,7 +2,10 @@
   <ion-navbar>
     <ion-title>{{ spesa.testo }}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="saveSpesaToService()">
+      <button ion-button icon-only *ngIf="exist" (click)="removeSpesaFromService()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+      <button ion-button icon-only [disabled]="!f.valid" (click)="saveSpesaToService()">
         <ion-icon name="checkmark"></ion-icon>
       </button>
     </ion-buttons>
@@ -11,32 +14,32 @@
 
 
 <ion-content padding>
-  <ion-list>
+  <form #f="ngForm">
 
-    <ion-item>
-      <ion-label stacked>Testo</ion-label>
-      <ion-input type="text" [(ngModel)]="spesa.testo"></ion-input>
-    </ion-item>
+    <ion-list>
+      <ion-item>
+        <ion-label stacked>Testo</ion-label>
+        <ion-input type="text" [(ngModel)]="spesa.testo" name="testo" required></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label>Categoria</ion-label>
-      <ion-select [(ngModel)]="spesa.categoria">
-        <ion-option *ngFor="let categoria of categorie">{{ categoria }}</ion-option>
-      </ion-select>
-    </ion-item>
+      <ion-item>
+        <ion-label>Categoria</ion-label>
+        <ion-select [(ngModel)]="spesa.categoria" name="categoria" required>
+          <ion-option *ngFor="let categoria of categorie">{{ categoria }}</ion-option>
+        </ion-select>
+      </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Valore Spesa</ion-label>
-      <ion-input type="number" [(ngModel)]="spesa.spesa"></ion-input>
-    </ion-item>
+      <ion-item>
+        <ion-label stacked>Valore Spesa</ion-label>
+        <ion-input type="number" [(ngModel)]="spesa.spesa" name="spesa" required></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Data</ion-label>
-      <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="spesa.data"></ion-datetime>
-    </ion-item>
+      <ion-item>
+        <ion-label stacked>Data</ion-label>
+        <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="spesa.data" name="data" required></ion-datetime>
+      </ion-item>
 
-  </ion-list>
-  <button ion-button (click)="removeSpesaFromService()">
-    Cancella
-  </button>
+    </ion-list>
+
+  </form>
 </ion-content>
