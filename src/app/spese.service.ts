@@ -1,26 +1,22 @@
+import { v4 } from 'uuid';
+
 import {SpesaInterface} from './spese.model';
 export class SpeseService {
     categorie = ['Viaggi', 'Svago', 'Lavoro', 'Elettronica', 'Informatica'];
-    nextId = 4;
-    expenses: SpesaInterface[] = [{
-        id: 1,
-        data: '2017-05-03',
-        testo: 'Biglietto per Venezia',
-        categoria: 'Viaggi',
-        spesa: 26
-    }, {
-        id: 2,
-        data: '2017-02-17',
-        testo: 'Concerto',
-        categoria: 'Svago',
-        spesa: 82
-    }, {
-        id: 3,
-        data: '2017-01-23',
-        testo: 'Ingresso presepe vivente',
-        categoria: 'Viaggi',
-        spesa: 100
-    }];
+    expenses: SpesaInterface[] = this.loadExpenses();
+
+    saveExpenses () {
+        localStorage.setItem('expenses', JSON.stringify(this.expenses));
+    }
+
+    loadExpenses () {
+        const savedExpenses = localStorage.getItem('expenses');
+        if (!savedExpenses) {
+            return [];
+        } else {
+            return JSON.parse(savedExpenses);
+        }
+    }
 
     getSpesa(idSpesa: number) {
         let spesaDetail = this.expenses.find(e => e.id === idSpesa);
@@ -30,16 +26,18 @@ export class SpeseService {
     saveSpesa(idSpesa: number, nuovaSpesa: SpesaInterface){
         let spesaDetailIndex = this.expenses.findIndex(e => e.id === idSpesa);
         this.expenses[spesaDetailIndex] = nuovaSpesa;
+        this.saveExpenses();
     }
 
     removeSpesa (idSpesa: number) {
         let spesaDetailIndex = this.expenses.findIndex(e => e.id === idSpesa);
         this.expenses.splice(spesaDetailIndex, 1);
+        this.saveExpenses();
     }
 
     addSpesa(nuovaSpesa: SpesaInterface) {
-        nuovaSpesa.id = this.nextId;
+        nuovaSpesa.id = v4();
         this.expenses.push(nuovaSpesa);
-        this.nextId ++;
+        this.saveExpenses();
     }
 }
